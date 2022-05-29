@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'authentication.apps.AuthenticationConfig',
     'corsheaders',
+    'fishing_spots_backend',
     'cars.apps.CarsConfig'  # This app is for example use only
 ]
 
