@@ -83,3 +83,21 @@ def get_fishing_spot_by_id(request, pk):
         fishing_spot.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def get_all_address(request):
+    if request.method == 'GET':
+        address = Address.objects.all()
+        serializer = AddressSerializer(address, many=True)
+        return Response(serializer.data)
+    
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def get_address_by_id(request, pk):
+    address = get_object_or_404(Address, pk=pk)
+    if request.method == 'GET':
+        serializer = AddressSerializer(address)
+        return Response(serializer.data)
+
+
