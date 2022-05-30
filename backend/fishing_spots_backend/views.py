@@ -73,4 +73,13 @@ def get_fishing_spot_by_id(request, pk):
         serializer = FishingSpotsSerializer(fishing_spot)
         return Response(serializer.data)
 
+    elif request.method == 'PUT':
+        serializer = FishingSpotsSerializer(fishing_spot, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    elif request.method == 'DELETE':
+        fishing_spot.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
