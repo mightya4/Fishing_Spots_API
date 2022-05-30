@@ -25,10 +25,9 @@ def get_all_users_detail(request):
         
     elif request.method == 'POST':
             serializer = CustomersSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save(user=request.user)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user_id=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -54,8 +53,11 @@ def get_user_detail(request, pk):
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_all_user_fishing_spots(request):
-    pass
-
+    if request.method == 'GET':
+        fishing_spots = FishingSpots.objects.all()
+        serializer = CustomersSerializer(fishing_spots, many=True)
+        return Response(serializer.data)
+        
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_fishing_spot_by_id(request, pk):
