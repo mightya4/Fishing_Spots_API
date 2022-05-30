@@ -30,17 +30,25 @@ def get_all_users_detail(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_user_detail(request, pk):
     print(
         'User ', f"{request.user.id} {request.user.email} {request.user.username}")
+        
     if request.method == 'GET':
         customer = Customers.objects.filter(pk=pk)
         serializer = CustomersSerializer(customer, many=True)
         return Response(serializer.data)
 
-    
+    elif request.method == 'PUT':
+        customer = Customers.objects.filter(pk=pk).first()
+        serializer = CustomersSerializer(customer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
