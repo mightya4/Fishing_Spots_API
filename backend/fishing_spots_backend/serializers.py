@@ -19,3 +19,4 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
         fields = ['id', 'name', 'street', 'city', 'state', 'zip_code', 'customer_id', 'fishing_spot_id']
         depth = 1
+    fishing_spot_id = serializers.IntegerField(write_only=True)

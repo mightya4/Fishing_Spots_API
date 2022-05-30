@@ -90,6 +90,12 @@ def get_all_address(request):
         address = Address.objects.all()
         serializer = AddressSerializer(address, many=True)
         return Response(serializer.data)
+        
+    elif request.method == 'POST':
+            serializer = AddressSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(customer_id = request.user.id)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -100,4 +106,13 @@ def get_address_by_id(request, pk):
         serializer = AddressSerializer(address)
         return Response(serializer.data)
 
+    elif request.method == 'PUT':
+        serializer = AddressSerializer(address, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    elif request.method == 'DELETE':
+        address.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
