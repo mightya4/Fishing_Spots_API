@@ -50,14 +50,21 @@ def get_user_detail(request, pk):
         customer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['GET', 'POST', 'DELETE'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def get_all_user_fishing_spots(request):
     if request.method == 'GET':
         fishing_spots = FishingSpots.objects.all()
-        serializer = CustomersSerializer(fishing_spots, many=True)
+        serializer = FishingSpotsSerializer(fishing_spots, many=True)
         return Response(serializer.data)
         
+    elif request.method == 'POST':
+            serializer = FishingSpotsSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_fishing_spot_by_id(request, pk):
