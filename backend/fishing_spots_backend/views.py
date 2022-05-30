@@ -68,5 +68,9 @@ def get_all_user_fishing_spots(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_fishing_spot_by_id(request, pk):
-    pass
+    fishing_spot = get_object_or_404(FishingSpots, pk=pk)
+    if request.method == 'GET':
+        serializer = FishingSpotsSerializer(fishing_spot)
+        return Response(serializer.data)
+
 
