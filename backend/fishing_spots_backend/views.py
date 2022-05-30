@@ -14,6 +14,15 @@ def get_all_parks_campgrounds(request):
     serializer = FishingSpotsSerializer(parks_and_campgrounds, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])    
+def get_all_users_detail(request):
+    if request.method == 'GET':
+        customers = Customers.objects.all()
+        serializer = CustomersSerializer(customers, many=True)
+        return Response(serializer.data)
+        
+
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_user_detail(request, pk):
@@ -24,6 +33,7 @@ def get_user_detail(request, pk):
         serializer = CustomersSerializer(customer, many=True)
         return Response(serializer.data)
 
+    
 
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
