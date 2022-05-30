@@ -10,13 +10,20 @@ from .urls import *
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_all_parks_campgrounds(request):
-    pass
-
+    parks_and_campgrounds = FishingSpots.objects.all()
+    serializer = FishingSpotsSerializer(parks_and_campgrounds, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_user_detail(request, pk):
-    pass
+    print(
+        'User ', f"{request.user.id} {request.user.email} {request.user.username}")
+    if request.method == 'GET':
+        customer = Customers.objects.filter(pk=pk)
+        serializer = CustomersSerializer(customer, many=True)
+        return Response(serializer.data)
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
