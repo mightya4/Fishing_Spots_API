@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -35,20 +36,20 @@ def get_all_users_detail(request):
 def get_user_detail(request, pk):
     print(
         'User ', f"{request.user.id} {request.user.email} {request.user.username}")
-        
+    customer = get_object_or_404(Customers, pk=pk)
     if request.method == 'GET':
-        customer = Customers.objects.filter(pk=pk)
-        serializer = CustomersSerializer(customer, many=True)
+        serializer = CustomersSerializer(customer)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        customer = Customers.objects.filter(pk=pk).first()
         serializer = CustomersSerializer(customer, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
+    elif request.method == 'DELETE':
+        customer.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
