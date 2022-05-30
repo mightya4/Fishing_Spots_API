@@ -5,7 +5,7 @@ from fishing_spots_backend.models import *
 class CustomersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customers
-        fields = ['id', 'first_name', 'last_name', 'current_location', 'user_id']
+        fields = ['id', 'first_name', 'last_name', 'user_id']
         depth = 1
 
 class FishingSpotsSerializer(serializers.ModelSerializer):

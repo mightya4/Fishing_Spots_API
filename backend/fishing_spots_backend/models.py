@@ -7,7 +7,6 @@ class Customers(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, default="")
     last_name = models.CharField(max_length=255, default="")
-    current_location = models.CharField(max_length=255, default="")
 
 class FishingSpots(models.Model):
     isFished = models.BooleanField(default=False)

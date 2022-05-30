@@ -14,7 +14,7 @@ def get_all_parks_campgrounds(request):
     serializer = FishingSpotsSerializer(parks_and_campgrounds, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])    
 def get_all_users_detail(request):
     if request.method == 'GET':
@@ -22,6 +22,13 @@ def get_all_users_detail(request):
         serializer = CustomersSerializer(customers, many=True)
         return Response(serializer.data)
         
+    elif request.method == 'POST':
+            serializer = CustomersSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(user=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
