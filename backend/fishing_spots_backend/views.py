@@ -26,7 +26,7 @@ def get_all_users_detail(request):
     elif request.method == 'POST':
             serializer = CustomersSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            serializer.save(user_id=request.user)
+            serializer.save(user_id=request.user.id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
