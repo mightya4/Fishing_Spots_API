@@ -1,7 +1,6 @@
-const SearchBox = () => {
+const SearchBox = (props) => {
     return ( 
-        <>
-        </>
+        <></>
      );
 }
  
