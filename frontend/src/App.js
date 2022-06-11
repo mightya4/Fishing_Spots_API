@@ -11,12 +11,13 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 // Component Imports
 import Navbar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
-import DisplayMap from "./components/Maps/DisplayMap";
 import GetLocation from "./components/Maps/GetLocation";
+import GoogleMaps from "./components/Maps/GoogleMaps";
 import SearchBox from "./components/Search/SearchBox";
 
 // Util Imports
 import PrivateRoute from "./utils/PrivateRoute";
+
 
 
 
@@ -30,7 +31,7 @@ function App() {
       <Navbar />
       {/* <SearchBox setSearchResults={setSearchResults}/> */}
       <GetLocation setLatitude={setLatitude} setLongitude={setLongitude}/>
-      <DisplayMap latitude={latitude} longitude={longitude} searchResults={searchResults}/>
+      <GoogleMaps latitude={latitude} longitude={longitude} searchResults={searchResults}/>
       <Routes>
         <Route
           path="/"
