@@ -29,8 +29,8 @@ function App() {
   return (
     <div>
       <Navbar />
-      {/* <SearchBox setSearchResults={setSearchResults}/> */}
-      <GetLocation setLatitude={setLatitude} setLongitude={setLongitude}/>
+      <SearchBox searchResults={searchResults} setSearchResults={setSearchResults}/>
+      <GetLocation searchResults={searchResults} setLatitude={setLatitude} setLongitude={setLongitude}/>
       <GoogleMaps latitude={latitude} longitude={longitude} searchResults={searchResults}/>
       <Routes>
         <Route
