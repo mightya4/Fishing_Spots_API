@@ -61,6 +61,12 @@ const InitMap = () => {
     })
     console.log(parkLatLngArray)
 
+    //Adjust map bounds to fit all markers
+    function fitMarkersInMapView(currentMap, currentMarkerBounds, currentMarker){
+        currentMarkerBounds.extend(currentMarker.getPosition())
+        currentMap.fitBounds(currentMarkerBounds)
+    }
+
     //Create an array of markers and a function to update the array
     var arrayOfMarkers = []
     var markerBounds = new window.google.maps.LatLngBounds();
@@ -74,8 +80,8 @@ const InitMap = () => {
             })
 
             arrayOfMarkers.push(marker)
+            fitMarkersInMapView(map, markerBounds, marker)
             
-            markerBounds.extend( point)
             window.google.maps.event.addListener(marker, 'click', (function(marker, i){
                 return function(){
                     infowindow.setContent(arrayOfLatLng[i])
