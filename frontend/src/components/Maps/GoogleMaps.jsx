@@ -1,11 +1,25 @@
-import { useState, useEffect } from 'react';
 import { GOOGLE_MAP_KEY } from '../../LocalKey';
+import "./GoogleMaps.css"
 
 
 
 const GoogleMaps = () => {
 
-        return <div id="map" style={{width: 600, height: 600}}></div>
+        // return <div id="map" style={{width: 600, height: 600}}></div>
+        return (
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="map" style={{width:"40rem", height:"40rem", border: "2px solid #2123ac"}}></div>
+                    </td>
+                    <td>
+                        <div id="DisplayDirectionPanel"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        )
         }
  
 
@@ -53,9 +67,6 @@ const InitMap = () => {
             console.log(results)
             for(var i = 0; i < results.length; i++){
                 parkLatLngArray.push({name: results[i].name, lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng(), rating: results[i].rating, icon: results[i].icon, photos: results[i].photos, address: results[i].formatted_address})
-                console.log(
-                    `name: ${results[i].name} | lat: ${results[i].geometry.location.lat()} | lng: ${results[i].geometry.location.lng()}`
-                )
             }
         }
 
@@ -91,6 +102,24 @@ const InitMap = () => {
                 }
             })(marker, i))
 
+        }
+    }
+
+    var displayDirections = new window.google.maps.DirectionsRenderer()
+    var directionsService = new window.google.maps.DirectionsService()
+    var from_location = []
+    var to_location = []
+
+    displayDirections.setMap(map)
+    displayDirections.setPanel(document.getElementById("DisplayDirectionPanel"))
+    window.google.maps.event.addListener(map, 'click', function(){
+        infowindow.close()
+    })
+
+    function getDirections(){
+        var request = {};
+        if(document.getElementById("walk").checked){
+            request.travelMode = window.google.maps.DirectionTravelMode.WALKING;
         }
     }
     
