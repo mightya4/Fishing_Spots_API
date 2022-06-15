@@ -50,8 +50,9 @@ const InitMap = () => {
     var parkLatLngArray = []
     service.textSearch(request, function(results, status) {
         if(status === window.google.maps.places.PlacesServiceStatus.OK) {
+            console.log(results)
             for(var i = 0; i < results.length; i++){
-                parkLatLngArray.push({lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng()})
+                parkLatLngArray.push({name: results[i].name, lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng(), rating: results[i].rating, icon: results[i].icon, photos: results[i].photos, address: results[i].formatted_address})
                 console.log(
                     `name: ${results[i].name} | lat: ${results[i].geometry.location.lat()} | lng: ${results[i].geometry.location.lng()}`
                 )
@@ -81,10 +82,11 @@ const InitMap = () => {
 
             arrayOfMarkers.push(marker)
             fitMarkersInMapView(map, markerBounds, marker)
-            
+
+            //Create info window and display select marker information
             window.google.maps.event.addListener(marker, 'click', (function(marker, i){
                 return function(){
-                    infowindow.setContent(arrayOfLatLng[i])
+                    infowindow.setContent(`<p><b>${parkLatLngArray[i].name}</b></p><p>address: ${parkLatLngArray[i].address}</p><p>rating: ${parkLatLngArray[i].rating}</p>`)
                     infowindow.open(map, marker);
                 }
             })(marker, i))
