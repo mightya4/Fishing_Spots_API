@@ -1,52 +1,111 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { GOOGLE_MAP_KEY } from '../../LocalKey';
 
-    var map;
-    var infowindow;
-    var latitude;
-    var longitude;
+
+
+const GoogleMaps = () => {
+
+        return <div id="map" style={{width: 600, height: 600}}></div>
+        }
+ 
+
+
+const InitMap = () => {
+    var lat= 0;
+    var lng = 0;
+
     
+    
+    var infowindow = new window.google.maps.InfoWindow();
+    function sleep(ms){
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-const GoogleMaps = (props) => {
-    latitude = parseFloat(props.latitude)
-    longitude = parseFloat(props.longitude)
-    console.log("lat: "+ latitude)
-    console.log("long: "+longitude)
-    return ( 
-        <div id = 'map' style={{width: 800, height: 600}}>
-
-        </div>
-     );
-}
-
-const InitMap = (props) => {
-    // const isValidCenter = latitude!=="" && longitude!==""
-    // if(isValidCenter){}
-    var current_location = new window.google.maps.LatLng(26.75779, -80.083728);
+    const LoadMap = (()=>{
+    var current_location = new window.google.maps.LatLng(parseFloat(lat), parseFloat(lng));
 
     infowindow = new window.google.maps.InfoWindow();
 
+    var map;
+
+    
     map = new window.google.maps.Map(
         document.getElementById('map'), {center: current_location, zoom: 15});
-   
-
-    var service = new window.google.maps.places.PlacesService(map);
-
+        var service = new window.google.maps.places.PlacesService(map);
+    //Get current location
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position){
+            lat = position.coords["latitude"]
+            lng = position.coords["longitude"]
+            var newLatLng = new window.google.maps.LatLng(lat, lng)
+            console.log(`current locale: ${lat} , ${lng}`)
+            map.panTo(newLatLng)
+        })
+        
     //Find all parks nearby user location
     var request = {
         query: 'park',
         fields: ['name', 'geometry'],
     };
+    var parkLatLngArray = []
     service.textSearch(request, function(results, status) {
         if(status === window.google.maps.places.PlacesServiceStatus.OK) {
             for(var i = 0; i < results.length; i++){
-                console.log(results[i])
+                parkLatLngArray.push({lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng()})
+                console.log(
+                    `name: ${results[i].name} | lat: ${results[i].geometry.location.lat()} | lng: ${results[i].geometry.location.lng()}`
+                )
             }
         }
 
     })
+    console.log(parkLatLngArray)
+
+    //Create an array of markers and a function to update the array
+    var arrayOfMarkers = []
+    var markerBounds = new window.google.maps.LatLngBounds();
+    function createMarker (arrayOfLatLng) {
+        for(var i = 0; i < arrayOfLatLng.length; i++){
+            var point = new window.google.maps.LatLng(parseFloat(arrayOfLatLng[i].lat), parseFloat(arrayOfLatLng[i].lng))
+            var marker = new window.google.maps.Marker({
+                animation: window.google.maps.Animation.DROP,
+                position: point,
+                map: map,
+            })
+
+            arrayOfMarkers.push(marker)
+            
+            markerBounds.extend( point)
+            window.google.maps.event.addListener(marker, 'click', (function(marker, i){
+                return function(){
+                    infowindow.setContent(arrayOfLatLng[i])
+                    infowindow.open(map, marker);
+                }
+            })(marker, i))
+
+        }
+    }
+    
+
+    //Populate the array of markers and drop the marker at each location
+    sleep(500).then(() => {
+    if(map!== null && parkLatLngArray!== null){
+        console.log("Map is idle")
+        createMarker(parkLatLngArray)
+    }
+    })
+    }
+
+    })
+    
+    //Wait before loading map
+    sleep(1000).then(() => {
+        LoadMap()
+    })
 
     }
+
+    
 
 
     window.GOOGLE_MAP_KEY = GOOGLE_MAP_KEY
