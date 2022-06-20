@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { GOOGLE_MAP_KEY } from '../../LocalKey';
+import DisplayParks from './DisplayParks';
 import "./GoogleMaps.css"
 
 
 
 const GoogleMaps = () => {
-
+    const [parks, setParks] = useState([])
     const InitMap = () => {
         var lat= 0;
         var lng = 0;
@@ -90,8 +92,9 @@ const GoogleMaps = () => {
                     title: title
                 })
                 
-    
+                
                 arrayOfMarkers.push(marker)
+                setParks(arrayOfMarkers)
                 fitMarkersInMapView(map, markerBounds, marker)
                 var setLocationContent = marker.getTitle() + '<br>Directions: <a href="javascript:toLocation(' + i + ')">To Location</a> - <a href="javascript:fromLocation(' + i + ')">From Location</a>';
     
@@ -191,18 +194,21 @@ const GoogleMaps = () => {
 
         // return <div id="map" style={{width: 600, height: 600}}></div>
         return (
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                        <div id="map" style={{width:"40rem", height:"40rem", border: "2px solid #2123ac"}}></div>
-                    </td>
-                    <td>
-                        <div id="DisplayDirectionPanel"></div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div id="map" style={{width:"40rem", height:"40rem", border: "2px solid #2123ac"}}></div>
+                            </td>
+                            <td>
+                                <div id="DisplayDirectionPanel"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <DisplayParks parks={parks}/>
+            </div>
         )
         }
 
