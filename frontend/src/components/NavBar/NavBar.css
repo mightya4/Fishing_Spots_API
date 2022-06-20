@@ -9,7 +9,7 @@ li {
 }
 
 .navBar {
-  background: steelblue;
+  background: linear-gradient( to right, #fbbe54, #d2831c);;
   box-shadow: 4px 2px 5px gray;
   color: white;
   margin-bottom: 2rem;
@@ -18,7 +18,7 @@ li {
 
 .navBar button {
   background: transparent;
-  border: 2px solid white;
+  border: 2px solid rgba(221, 40, 27, 0.294);
   color: white;
   padding: 0.4rem 0.5rem;
 }

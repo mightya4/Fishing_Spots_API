@@ -9,6 +9,7 @@
 }
 
 html {
+  background: linear-gradient(#febf6e, #ebbf85, #5ce7ffc9, #3f8eb0);
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
@@ -56,3 +57,4 @@ button:hover {
   padding: 3px 7px;
   font-size: 17px;
 }
+
