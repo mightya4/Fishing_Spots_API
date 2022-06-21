@@ -10,6 +10,7 @@ const DisplayParks = (props) => {
                         <th>Name</th>
                         <th>Rating</th>
                         <th>Address</th>
+                        <th>Has Fishing</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,6 +21,7 @@ const DisplayParks = (props) => {
                                         <td>{park.name}</td>
                                         <td>{park.rating}</td>
                                         <td>{park.formatted_address}</td>
+                                        <td>{park.is_fished}</td>
                                     </tr>
                         
                                 )
@@ -29,7 +31,7 @@ const DisplayParks = (props) => {
         </div>
      );}
 
-     
+
      return(
             <></>
      )
