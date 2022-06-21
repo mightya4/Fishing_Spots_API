@@ -205,7 +205,7 @@ const GoogleMaps = () => {
                     <tbody>
                         <tr>
                             <td>
-                                <div className='map-box' id="map" ></div>
+                                <div className='map-box' id="map"></div>
                             </td>
                             <td>
                                 <div id="DisplayDirectionPanel"></div>

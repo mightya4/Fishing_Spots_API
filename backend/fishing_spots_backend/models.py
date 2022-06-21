@@ -2,23 +2,14 @@ from django.db import models
 from authentication.models import User
 
 # Create your models here.
-
-class Customers(models.Model):
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=255, default="")
-    last_name = models.CharField(max_length=255, default="")
-
 class FishingSpots(models.Model):
-    isFished = models.BooleanField(default=False)
-    fish_types = models.CharField(max_length=255, default="")
-    rating = models.DecimalField(decimal_places=1, max_digits=2)
-    images = models.FileField(null=True)
-
-class Address(models.Model):
     name = models.CharField(max_length=255, default="")
-    street = models.CharField(max_length=255, default="")
-    city = models.CharField(max_length=255, default="")
-    state = models.CharField(max_length=255, default="")
-    zip_code = models.IntegerField(default=0)
-    customer = models.ForeignKey(Customers, null=True, on_delete=models.CASCADE)
-    fishing_spot = models.ForeignKey(FishingSpots, null=True, on_delete=models.CASCADE)
+    rating = models.DecimalField(decimal_places=1, max_digits=2)
+    isFished = models.BooleanField(default=False)
+    types_of_fish = models.CharField(max_length=255, default="")
+    formatted_address = models.CharField(max_length=255, default="")
+    latitude = models.IntegerField(default=0)
+    longitude = models.IntegerField(default=0)
+    place_id = models.CharField(max_length=255, default="")
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+   

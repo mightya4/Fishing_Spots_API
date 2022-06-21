@@ -1,22 +1,8 @@
 from rest_framework import serializers
 from fishing_spots_backend.models import *
 
-
-class CustomersSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Customers
-        fields = ['id', 'first_name', 'last_name', 'user_id']
-        depth = 1
-
 class FishingSpotsSerializer(serializers.ModelSerializer):
     class Meta:
         model = FishingSpots
-        fields = ['id', 'isFished', 'fish_types', 'rating', 'images']
+        fields = ['id', 'name', 'rating', 'is_fished', 'types_of_fish', 'formatted_address', 'lat', 'lng', 'place_id', 'user_id']
         depth = 1
-
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields = ['id', 'name', 'street', 'city', 'state', 'zip_code', 'customer_id', 'fishing_spot_id']
-        depth = 1
-    fishing_spot_id = serializers.IntegerField(write_only=True)

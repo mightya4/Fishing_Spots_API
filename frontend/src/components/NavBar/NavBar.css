@@ -20,6 +20,7 @@ li {
 .navBar button {
   background: transparent;
   border: 2px solid rgba(221, 40, 27, 0.294);
+  border-radius: 1rem;
   color: white;
   padding: 0.4rem 0.5rem;
 }

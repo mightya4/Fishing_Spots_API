@@ -16,41 +16,6 @@ def get_all_parks_campgrounds(request):
     return Response(serializer.data)
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])    
-def get_all_users_detail(request):
-    if request.method == 'GET':
-        customers = Customers.objects.all()
-        serializer = CustomersSerializer(customers, many=True)
-        return Response(serializer.data)
-        
-    elif request.method == 'POST':
-            serializer = CustomersSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(user_id=request.user.id)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticated])
-def get_user_detail(request, pk):
-    print(
-        'User ', f"{request.user.id} {request.user.email} {request.user.username}")
-    customer = get_object_or_404(Customers, pk=pk)
-    if request.method == 'GET':
-        serializer = CustomersSerializer(customer)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = CustomersSerializer(customer, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    elif request.method == 'DELETE':
-        customer.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def get_all_user_fishing_spots(request):
     if request.method == 'GET':
@@ -83,36 +48,4 @@ def get_fishing_spot_by_id(request, pk):
         fishing_spot.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def get_all_address(request):
-    if request.method == 'GET':
-        address = Address.objects.all()
-        serializer = AddressSerializer(address, many=True)
-        return Response(serializer.data)
-        
-    elif request.method == 'POST':
-            serializer = AddressSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(customer_id = request.user.id)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-
-@api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticated])
-def get_address_by_id(request, pk):
-    address = get_object_or_404(Address, pk=pk)
-    if request.method == 'GET':
-        serializer = AddressSerializer(address)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = AddressSerializer(address, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    elif request.method == 'DELETE':
-        address.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
