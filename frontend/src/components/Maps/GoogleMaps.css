@@ -8,3 +8,13 @@ tr {
     height: 100%;
     width: 50%;
 }
+
+.map-box {
+    height: 40rem;
+    width: 40rem;
+    border-width: 3px;
+    border-style: solid;
+    border-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba(109, 173, 200, 0), rgb(130, 203, 249), rgba(109, 173, 200, 0), rgba(0,0,0,0)) 1 100%;
+    border-radius: 2rem;
+
+}

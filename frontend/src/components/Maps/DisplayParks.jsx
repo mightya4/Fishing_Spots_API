@@ -2,7 +2,7 @@ import './DisplayParks.css'
 
 const DisplayParks = (props) => {
 
-    return ( 
+    if(props.isLoadedParks){return ( 
         <div className='display-box'>
             <table>
                 <thead>
@@ -27,7 +27,13 @@ const DisplayParks = (props) => {
                 </tbody>
             </table>
         </div>
-     );
+     );}
+
+     
+     return(
+            <></>
+     )
+    
 }
  
 export default DisplayParks;

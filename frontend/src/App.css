@@ -9,7 +9,7 @@
 }
 
 html {
-  background: linear-gradient(#febf6e, #ebbf85, #5ce7ffc9, #3f8eb0);
+  background: linear-gradient(to right, #20355e, #5ba2f3, #7bb7fb);
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }

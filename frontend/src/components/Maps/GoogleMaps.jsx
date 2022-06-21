@@ -7,6 +7,7 @@ import "./GoogleMaps.css"
 
 const GoogleMaps = () => {
     const [parks, setParks] = useState([])
+    const [isLoadedParks, setIsLoadedParks] = useState(false);
     const InitMap = () => {
         var lat= 0;
         var lng = 0;
@@ -95,6 +96,10 @@ const GoogleMaps = () => {
                 
                 arrayOfMarkers.push(marker)
                 setParks(arrayOfMarkers)
+                if(parks.length > 1){
+                    setIsLoadedParks(true)
+                }
+                console.log(`isLoaded Parks: ${isLoadedParks}`)
                 fitMarkersInMapView(map, markerBounds, marker)
                 var setLocationContent = marker.getTitle() + '<br>Directions: <a href="javascript:toLocation(' + i + ')">To Location</a> - <a href="javascript:fromLocation(' + i + ')">From Location</a>';
     
@@ -188,6 +193,7 @@ const GoogleMaps = () => {
         })
 
     }
+    console.log(`parks: ${parks}`)
 
     window.GOOGLE_MAP_KEY = GOOGLE_MAP_KEY
     window.InitMap = InitMap
@@ -199,7 +205,7 @@ const GoogleMaps = () => {
                     <tbody>
                         <tr>
                             <td>
-                                <div id="map" style={{width:"40rem", height:"40rem", border: "2px solid #2123ac"}}></div>
+                                <div className='map-box' id="map" ></div>
                             </td>
                             <td>
                                 <div id="DisplayDirectionPanel"></div>
@@ -207,7 +213,7 @@ const GoogleMaps = () => {
                         </tr>
                     </tbody>
                 </table>
-                <DisplayParks parks={parks}/>
+                <DisplayParks parks={parks} isLoadedParks ={isLoadedParks}/>
             </div>
         )
         }
