@@ -5,8 +5,7 @@ import "./GoogleMaps.css"
 
 
 
-const GoogleMaps = () => {
-    const [parks, setParks] = useState([])
+const GoogleMaps = (props) => {
     const [isLoadedParks, setIsLoadedParks] = useState(false);
     const InitMap = () => {
         var lat= 0;
@@ -95,13 +94,10 @@ const GoogleMaps = () => {
                 
                 
                 arrayOfMarkers.push(marker)
-                setParks(arrayOfMarkers)
-                if(parks.length > 1){
-                    setIsLoadedParks(true)
-                }
-                console.log(`isLoaded Parks: ${isLoadedParks}`)
+                props.setParks(parkLatLngArray)
+             
                 fitMarkersInMapView(map, markerBounds, marker)
-                var setLocationContent = marker.getTitle() + '<br>Directions: <a href="javascript:toLocation(' + i + ')">To Location</a> - <a href="javascript:fromLocation(' + i + ')">From Location</a>';
+                var setLocationContent = marker.getTitle() + '<br>Directions: <a href="javascript:toLocation(' + i + ')">To Location</a> - <a href="javascript:fromLocation(' + i + ')">From Location</a> <br>Add Fishing Spot: <a href="javascript:AddFishingSpot(' + marker + ')">';
     
                 to_location[i] = setLocationContent + '<br>Directions: <b>To Location</b> - <a href="javascript:fromLocation(' + i + ')">From Location</a>' +
                     '<br>Start address:<form action="javascript:getDirections()">' +
@@ -176,6 +172,12 @@ const GoogleMaps = () => {
             infowindow.open(map, arrayOfMarkers[i])
         }
     
+        //Add Fishing Spot Based on Current Marker Information
+        const AddFishingSpot = ((current_marker)=>{
+            infowindow.setContent(current_marker)
+            infowindow.open(map, current_marker)
+        })
+
         //Populate the array of markers and drop the marker at each location
         sleep(500).then(() => {
         if(map!== null && parkLatLngArray!== null){
@@ -193,7 +195,7 @@ const GoogleMaps = () => {
         })
 
     }
-    console.log(`parks: ${parks}`)
+
 
     window.GOOGLE_MAP_KEY = GOOGLE_MAP_KEY
     window.InitMap = InitMap
@@ -213,7 +215,6 @@ const GoogleMaps = () => {
                         </tr>
                     </tbody>
                 </table>
-                <DisplayParks parks={parks} isLoadedParks ={isLoadedParks}/>
             </div>
         )
         }
