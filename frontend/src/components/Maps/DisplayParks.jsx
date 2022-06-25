@@ -1,3 +1,4 @@
+import Card from 'react-bootstrap/Card'
 import './DisplayParks.css'
 
 const DisplayParks = (props) => {
@@ -6,32 +7,23 @@ const DisplayParks = (props) => {
      return(
             <>
                <div className='display-box'>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Rating</th>
-                                <th>Address</th>
-                                {/* <th>Has Fished</th>
-                                <th>Is Fishing Location</th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                                {props.parks &&
-                                    props.parks.map((park, index) => {
-                                        return(
-                                            <tr key = {index}>
-                                                <td>{park.name}</td>
-                                                <td>{park.rating}</td>
-                                                <td>{park.address}</td>
-                                                {/* <td>{park.has_fished}</td>
-                                                <td>{park.is_fishing_location}</td> */}
-                                            </tr>
+                    {props.parks &&
+                        props.parks.map((park, index) => {
+                            return(
+                                <>
+                                    <Card border="primary" style={{ display: 'flex', flexWrap: 'wrap'}}>
+                                        <Card.Header></Card.Header>
+                                        <Card.Body>
+                                            <Card.Title>{park.name}</Card.Title>
+                                            <Card.Text>{park.rating}</Card.Text>
+                                            <Card.Text>{park.address}</Card.Text>
+                                            <Card.Text></Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                <br/>
+                            </>
                                 
-                                        )
-                                        })}
-                        </tbody>
-                    </table>
+                    )})}
             </div>
         </>
      )

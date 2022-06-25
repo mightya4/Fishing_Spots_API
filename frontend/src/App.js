@@ -28,7 +28,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <SearchBox searchResults={searchResults} setSearchResults={setSearchResults}/>
+      {/* <SearchBox searchResults={searchResults} setSearchResults={setSearchResults}/> */}
       <Routes>
         <Route
           path="/"
