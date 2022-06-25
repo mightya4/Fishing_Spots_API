@@ -12,7 +12,6 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 // Component Imports
 import Navbar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
-import GoogleMaps from "./components/Maps/GoogleMaps";
 import SearchBox from "./components/Search/SearchBox";
 import DisplayParks from "./components/Maps/DisplayParks";
 
@@ -30,13 +29,12 @@ function App() {
     <div>
       <Navbar />
       <SearchBox searchResults={searchResults} setSearchResults={setSearchResults}/>
-      <GoogleMaps setParks = {setParks}/>
       <Routes>
         <Route
           path="/"
           element={
             <PrivateRoute>
-              <HomePage />
+              <HomePage setParks = {setParks}/>
             </PrivateRoute>
           }
         />
