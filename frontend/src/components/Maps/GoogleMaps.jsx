@@ -51,10 +51,6 @@ const GoogleMaps = (props) => {
         };
         var parkLatLngArray = []
     
-        sleep(1000).then(() => {
-            parkLatLngArray.push({name: "current location", lat: lat, lng: lng})
-        })
-    
         
         // parkLatLngArray.push({name: "current location", lat: lat, lng: lng})
         service.textSearch(request, function(results, status) {
