@@ -2,17 +2,37 @@ import {
     Box,
     Card,
     CardActions,
-    CardActionArea,
     CardContent,
+    CardHeader,
     CardMedia,
-    Button,
+    IconButton,
     Typography
 } from '@mui/material'
+import { Favorite } from '@mui/icons-material'
 import './DisplayParks.css'
 
 const DisplayParks = (props) => {
     console.log(props.parks)
+    const lowerCaseAllLetters = (someWords) => {
+        return someWords.toLowerCase()
+    }
+    const capitalizeFirstLetter = ([firstLetter, ...rest]) => {
+        return (firstLetter.toUpperCase() + rest.join(''))
+    }
+    const splitWordsBySpace = (wordToSplit) => {
+        return Array.from(wordToSplit.split(" "))
+    }
 
+    const editEachWord = (someWords) => {
+        someWords = lowerCaseAllLetters(someWords)
+        someWords = splitWordsBySpace(someWords)
+        for(var i = 0; i < someWords.length; i++){
+            someWords[i] = capitalizeFirstLetter(someWords[i])
+        }
+        someWords = someWords.join(' ')
+        return(someWords)
+        
+    }
      return(
             <div style={{ padding: 30 }}>
                 <Box sx={{ display: 'grid', columnGap:3, rowGap: 1, gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: 'auto' }}>
@@ -20,7 +40,11 @@ const DisplayParks = (props) => {
                         props.parks.map((park, index) => {
                             return(
                                     <Card maxWidth={345} key={index}>
-                                        <CardActionArea>
+                                        <CardHeader
+                                            title = {editEachWord(park.name)}
+                                            subheader = {`Rating: ${park.rating}`}
+                                        />
+
                                             <CardMedia
                                                 component = "img"
                                                 alt = "default park image"
@@ -28,20 +52,20 @@ const DisplayParks = (props) => {
                                                 image="https://st2.depositphotos.com/1186248/7003/i/450/depositphotos_70032099-stock-photo-view-in-hyde-park-london.jpg"
                                             />
                                             <CardContent>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    {park.name}
-                                                </Typography>
                                                 <Typography variant="body2" color="text.secondary">
-                                                    {`Rating: ${park.rating}`}
+                                                    
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary">
                                                     {`Address: ${park.address}`}
                                                 </Typography>
                                             </CardContent>
-                                        </CardActionArea>
+                                        
                                         <CardActions>
+                                            <IconButton aria-label="add to favorites">
+                                                <Favorite />
+                                            </IconButton>
                                             {/* <Button size="small" color="primary">Directions</Button> */}
-                                            <Button size="small" color="primary">Add To Favorites</Button>
+                                            {/* <Button size="small" color="primary">Add To Favorites</Button> */}
                                         </CardActions>
                                     </Card>
                                 
