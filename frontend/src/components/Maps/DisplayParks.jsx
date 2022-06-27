@@ -1,18 +1,37 @@
+import { useState } from 'react' 
 import {
     Box,
+    Button,
     Card,
     CardActions,
     CardContent,
     CardHeader,
     CardMedia,
-    IconButton,
-    Typography
+    TextField,
+    Typography,
+    FormGroup,
+    FormControlLabel
 } from '@mui/material'
-import { Favorite } from '@mui/icons-material'
+import { CheckBox, Favorite, FavoriteBorder } from '@mui/icons-material'
 import './DisplayParks.css'
+import DisplayParkDetail from './DisplayParkDetail'
 
 const DisplayParks = (props) => {
     console.log(props.parks)
+    const [checked, setChecked] = useState(false)
+    const label = { inputProps: { 'aria-label': 'add to favorites' } }
+    const handleCardClick = (e, placeID) => {
+        console.log(placeID)
+        DisplayParkDetail(placeID)
+    }
+    const handleClick = (e, park, status) => {
+
+        console.log(e.target.checked)
+        e.target.checked=!checked
+        console.log(park)
+        console.log(e.target.checked)
+        console.log(status)
+    }
     const lowerCaseAllLetters = (someWords) => {
         return someWords.toLowerCase()
     }
@@ -23,7 +42,7 @@ const DisplayParks = (props) => {
         return Array.from(wordToSplit.split(" "))
     }
 
-    const editEachWord = (someWords) => {
+    const capitalizeEachWord = (someWords) => {
         someWords = lowerCaseAllLetters(someWords)
         someWords = splitWordsBySpace(someWords)
         for(var i = 0; i < someWords.length; i++){
@@ -33,15 +52,16 @@ const DisplayParks = (props) => {
         return(someWords)
         
     }
+
      return(
             <div style={{ padding: 30 }}>
                 <Box sx={{ display: 'grid', columnGap:3, rowGap: 1, gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: 'auto' }}>
                     {props.parks &&
                         props.parks.map((park, index) => {
                             return(
-                                    <Card maxWidth={345} key={index}>
+                                    <Card maxWidth={345} key={index} onClick={(event)=> {handleCardClick(event, park.place_id)}}>
                                         <CardHeader
-                                            title = {editEachWord(park.name)}
+                                            title = {capitalizeEachWord(park.name)}
                                             subheader = {`Rating: ${park.rating}`}
                                         />
 
@@ -61,11 +81,21 @@ const DisplayParks = (props) => {
                                             </CardContent>
                                         
                                         <CardActions>
-                                            <IconButton aria-label="add to favorites">
-                                                <Favorite />
-                                            </IconButton>
+                                            {/* <CheckBox {...label} icon = {<FavoriteBorder/>} checkedIcon={<Favorite/>} onChange={handleChange} aria-label="add to favorites"/> */}
+                        
                                             {/* <Button size="small" color="primary">Directions</Button> */}
-                                            {/* <Button size="small" color="primary">Add To Favorites</Button> */}
+                                            <FormGroup>
+                                                <FormControlLabel control={<CheckBox checked={checked} onClick={(event) => handleClick(event, park, "clicked")}/>} label="Is this a fishing location"/>
+                                                <FormControlLabel control={<CheckBox checked={checked} onClick={(event) => handleClick(event, park, "clicked")}/>} label="Have you fished here?"/>
+                                            </FormGroup>
+                                            {/* <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />
+                                            <Button size="small" color="primary" onClick={() => handleClick(park, "clicked")}>Add To Favorites</Button> */}
+                                        </CardActions>
+                                        <CardActions>
+                                            <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />
+                                        </CardActions>
+                                        <CardActions>
+                                            <Button size="small" color="primary" onClick={() => handleClick(park, "clicked")}>Add To Favorites</Button> 
                                         </CardActions>
                                     </Card>
                                 

@@ -1,12 +1,8 @@
-import { useState } from 'react';
 import { GOOGLE_MAP_KEY } from '../../LocalKey';
-import DisplayParks from './DisplayParks';
 import "./GoogleMaps.css"
 
 
-
 const GoogleMaps = (props) => {
-    const [isLoadedParks, setIsLoadedParks] = useState(false);
     const InitMap = () => {
         var lat= 0;
         var lng = 0;
@@ -20,9 +16,6 @@ const GoogleMaps = (props) => {
     
         const LoadMap = (()=>{
         var current_location = new window.google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-    
-        infowindow = new window.google.maps.InfoWindow();
-    
         var map;
         var displayDirections = new window.google.maps.DirectionsRenderer()
         var directionsService = new window.google.maps.DirectionsService()
@@ -44,9 +37,9 @@ const GoogleMaps = (props) => {
                 map.panTo(newLatLng)
             })
             
-        //Find all parks nearby user location
+        //Find all parks and lakes to fish nearby user location
         var request = {
-            query: 'park',
+            query: 'lakes near me to fish',
             fields: ['name', 'geometry'],
         };
         var parkLatLngArray = []
@@ -57,7 +50,7 @@ const GoogleMaps = (props) => {
             if(status === window.google.maps.places.PlacesServiceStatus.OK) {
                 console.log(results)
                 for(var i = 0; i < results.length; i++){
-                    parkLatLngArray.push({name: results[i].name, lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng(), rating: results[i].rating, icon: results[i].icon, photos: results[i].photos, address: results[i].formatted_address})
+                    parkLatLngArray.push({name: results[i].name, lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng(), rating: results[i].rating, icon: results[i].icon, photos: results[i].photos, address: results[i].formatted_address, place_id: results[i].place_id})
                 }
             }
     
@@ -86,8 +79,7 @@ const GoogleMaps = (props) => {
                     position: point,
                     map: map,
                     title: title
-                })
-                
+                }) 
                 
                 arrayOfMarkers.push(marker)
                 props.setParks(parkLatLngArray)

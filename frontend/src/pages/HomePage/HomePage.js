@@ -11,6 +11,7 @@ const HomePage = (props) => {
   //TODO: Add an AddCars Page to add a car for a logged in user's garage
   const [user, token] = useAuth();
   const [cars, setCars] = useState([]);
+  const [savedParks, setSavedParks] = useState([]);
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -27,6 +28,23 @@ const HomePage = (props) => {
     };
     fetchCars();
   }, [token]);
+
+  useEffect(() => {
+    const fetchAllSavedParks = async () => {
+      try {
+        let response = await axios.get("http://127.0.0.1:8000/api/map/all_saved_fishing_spots", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+        setSavedParks(response.data);
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    };
+    fetchAllSavedParks();
+  }, [token]);
+
   return (
     <div className="container">
       {/* <h1>Home Page for {user.username}!</h1> */}
@@ -37,6 +55,15 @@ const HomePage = (props) => {
           </p>
         ))} */}
         <GoogleMaps setParks = {props.setParks}/>
+        {/* Display all saved parks data underneath map */}
+        { savedParks && savedParks.map((park) => (
+          <p key={park.id}>
+            {park.user}
+            {park.name} {park.rating} {park.is_fishing_location} {park.has_fished} {park.types_of_fish} {park.formatted_address} {park.latitude} {park.longitude} 
+          </p>
+        ))
+
+        }
     </div>
   );
 };
