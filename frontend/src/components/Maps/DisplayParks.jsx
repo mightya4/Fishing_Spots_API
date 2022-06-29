@@ -13,25 +13,33 @@ import {
     FormGroup,
     FormControlLabel
 } from '@mui/material'
-import { CheckBox, Favorite, FavoriteBorder } from '@mui/icons-material'
+import { Favorite, FavoriteBorder } from '@mui/icons-material'
 import './DisplayParks.css'
 import DisplayParkDetail from './DisplayParkDetail'
 
 const DisplayParks = (props) => {
     console.log(props.parks)
-    const [checked, setChecked] = useState(false)
-    const label = { inputProps: { 'aria-label': 'add to favorites' } }
     const handleCardClick = (e, placeID) => {
         console.log(placeID)
         DisplayParkDetail(placeID)
     }
-    const handleClick = (e, park, status) => {
-
-        console.log(e.target.checked)
-        e.target.checked=!checked
-        console.log(park)
-        console.log(e.target.checked)
-        console.log(status)
+    const handleClick = (e, index, park, status) => {
+        return
+    }
+    const handleHasFishedCheck = (e, index, park, status) => {
+        
+        let newArray = [...props.parks]
+        console.log(newArray[index].has_fished)
+        newArray[index].has_fished = !park.has_fished
+        console.log(newArray[index].has_fished)
+        props.setParks(newArray)
+    }
+    const handleLocationCheck = (e, index, park, status) => {
+        let newArray = [...props.parks]
+        console.log(newArray[index].is_fishing_location)
+        newArray[index].is_fishing_location = !park.is_fishing_location
+        console.log(newArray[index].is_fishing_location)
+        props.setParks(newArray)
     }
     const lowerCaseAllLetters = (someWords) => {
         return someWords.toLowerCase()
@@ -86,8 +94,8 @@ const DisplayParks = (props) => {
                         
                                             {/* <Button size="small" color="primary">Directions</Button> */}
                                             <FormGroup>
-                                                <FormControlLabel control={<Checkbox onClick={(event) => handleClick(event, park, "clicked")}/>} label="Is this a fishing location"/>
-                                                <FormControlLabel control={<Checkbox onClick={(event) => handleClick(event, park, "clicked")}/>} label="Have you fished here?"/>
+                                                <FormControlLabel control={<Checkbox onClick={(event) => handleLocationCheck(event, index, park, "clicked")}/>} label="Is this a fishing location"/>
+                                                <FormControlLabel control={<Checkbox onClick={(event) => handleHasFishedCheck(event, index, park, "clicked")}/>} label="Have you fished here?"/>
                                             </FormGroup>
                                             {/* <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />
                                             <Button size="small" color="primary" onClick={() => handleClick(park, "clicked")}>Add To Favorites</Button> */}

@@ -34,11 +34,11 @@ function App() {
           path="/"
           element={
             <PrivateRoute>
-              <HomePage setParks = {setParks}/>
+              <HomePage parks = {parks}/>
             </PrivateRoute>
           }
         />
-        <Route path = "/displayparks" element={<DisplayParks parks={parks}/>} />
+        <Route path = "/displayparks" element={<DisplayParks  parks = {parks} setParks = {setParks}/>} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
