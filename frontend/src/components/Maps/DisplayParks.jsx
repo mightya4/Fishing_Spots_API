@@ -7,6 +7,7 @@ import {
     CardContent,
     CardHeader,
     CardMedia,
+    Checkbox,
     TextField,
     Typography,
     FormGroup,
@@ -85,8 +86,8 @@ const DisplayParks = (props) => {
                         
                                             {/* <Button size="small" color="primary">Directions</Button> */}
                                             <FormGroup>
-                                                <FormControlLabel control={<CheckBox checked={checked} onClick={(event) => handleClick(event, park, "clicked")}/>} label="Is this a fishing location"/>
-                                                <FormControlLabel control={<CheckBox checked={checked} onClick={(event) => handleClick(event, park, "clicked")}/>} label="Have you fished here?"/>
+                                                <FormControlLabel control={<Checkbox onClick={(event) => handleClick(event, park, "clicked")}/>} label="Is this a fishing location"/>
+                                                <FormControlLabel control={<Checkbox onClick={(event) => handleClick(event, park, "clicked")}/>} label="Have you fished here?"/>
                                             </FormGroup>
                                             {/* <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />
                                             <Button size="small" color="primary" onClick={() => handleClick(park, "clicked")}>Add To Favorites</Button> */}
@@ -95,7 +96,9 @@ const DisplayParks = (props) => {
                                             <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />
                                         </CardActions>
                                         <CardActions>
-                                            <Button size="small" color="primary" onClick={() => handleClick(park, "clicked")}>Add To Favorites</Button> 
+                                        <FormGroup>
+                                                <FormControlLabel control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} onClick={(event) => handleClick(event, park, "clicked")}/>} label="Favorite"/>
+                                        </FormGroup>
                                         </CardActions>
                                     </Card>
                                 
