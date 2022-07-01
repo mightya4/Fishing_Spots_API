@@ -1,7 +1,8 @@
-import { useState } from 'react' 
+import {useEffect} from 'react';
+import axios from 'axios';
+import useAuth from '../../hooks/useAuth';
 import {
     Box,
-    Button,
     Card,
     CardActions,
     CardContent,
@@ -15,18 +16,27 @@ import {
 } from '@mui/material'
 import { Favorite, FavoriteBorder } from '@mui/icons-material'
 import './DisplayParks.css'
-import DisplayParkDetail from './DisplayParkDetail'
+// import DisplayParkDetail from './DisplayParkDetail'
 
 const DisplayParks = (props) => {
+    const [user, token] = useAuth();
+    
     console.log(props.parks)
-    const handleCardClick = (e, placeID) => {
-        console.log(placeID)
-        DisplayParkDetail(placeID)
+    // const HandleCardClick = (e, placeID) => {
+    //     console.log(placeID)
+    //     DisplayParkDetail(placeID)
+    // }
+    const HandleClick = (index, park) => {
+        let newArray = [...props.parks]
+        let favoriteArray = []
+        props.park[index].is_favorite = !park.is_favorite
+        favoriteArray.push(newArray[index])
+        
+        console.log(favoriteArray)
+
+        props.setFavoriteParks(favoriteArray)
     }
-    const handleClick = (e, index, park, status) => {
-        return
-    }
-    const handleHasFishedCheck = (e, index, park, status) => {
+    const HandleHasFishedCheck = (index, park) => {
         
         let newArray = [...props.parks]
         console.log(newArray[index].has_fished)
@@ -34,7 +44,7 @@ const DisplayParks = (props) => {
         console.log(newArray[index].has_fished)
         props.setParks(newArray)
     }
-    const handleLocationCheck = (e, index, park, status) => {
+    const HandleLocationCheck = (index, park) => {
         let newArray = [...props.parks]
         console.log(newArray[index].is_fishing_location)
         newArray[index].is_fishing_location = !park.is_fishing_location
@@ -62,13 +72,30 @@ const DisplayParks = (props) => {
         
     }
 
+    useEffect(() => {
+        const savedPark = async () => {
+          try {
+            console.log(`Favorite Park: ${props.favoriteParks}`)
+            let response = await axios.post("http://127.0.0.1:8000/api/map/all_saved_fishing_spots", {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            });
+
+            response.data = props.favoriteParks;
+          } catch (error) {
+            console.log(error.response.data);
+          }
+        }
+        savedPark()
+        },[token])
      return(
             <div style={{ padding: 30 }}>
                 <Box sx={{ display: 'grid', columnGap:3, rowGap: 1, gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: 'auto' }}>
                     {props.parks &&
                         props.parks.map((park, index) => {
                             return(
-                                    <Card maxWidth={345} key={index} onClick={(event)=> {handleCardClick(event, park.place_id)}}>
+                                    <Card key={index} >
                                         <CardHeader
                                             title = {capitalizeEachWord(park.name)}
                                             subheader = {`Rating: ${park.rating}`}
@@ -94,8 +121,8 @@ const DisplayParks = (props) => {
                         
                                             {/* <Button size="small" color="primary">Directions</Button> */}
                                             <FormGroup>
-                                                <FormControlLabel control={<Checkbox onClick={(event) => handleLocationCheck(event, index, park, "clicked")}/>} label="Is this a fishing location"/>
-                                                <FormControlLabel control={<Checkbox onClick={(event) => handleHasFishedCheck(event, index, park, "clicked")}/>} label="Have you fished here?"/>
+                                                <FormControlLabel control={<Checkbox onClick={() => HandleLocationCheck(index, park)}/>} label="Is this a fishing location"/>
+                                                <FormControlLabel control={<Checkbox onClick={() => HandleHasFishedCheck(index, park)}/>} label="Fished"/>
                                             </FormGroup>
                                             {/* <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />
                                             <Button size="small" color="primary" onClick={() => handleClick(park, "clicked")}>Add To Favorites</Button> */}
@@ -105,7 +132,7 @@ const DisplayParks = (props) => {
                                         </CardActions>
                                         <CardActions>
                                         <FormGroup>
-                                                <FormControlLabel control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} onClick={(event) => handleClick(event, park, "clicked")}/>} label="Favorite"/>
+                                                <FormControlLabel control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} onClick={() => HandleClick(index, park)}/>} label="Favorite"/>
                                         </FormGroup>
                                         </CardActions>
                                     </Card>

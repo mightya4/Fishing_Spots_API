@@ -7,10 +7,11 @@ class FishingSpots(models.Model):
     rating = models.DecimalField(decimal_places=1, max_digits=2)
     is_fishing_location = models.BooleanField(default=False)
     has_fished = models.BooleanField(default=False)
+    is_favorite = models.BooleanField(default=False)
     types_of_fish = models.CharField(max_length=255, default="")
     formatted_address = models.CharField(max_length=255, default="")
-    latitude = models.IntegerField(default=0)
-    longitude = models.IntegerField(default=0)
+    lat = models.IntegerField(default=0)
+    lng = models.IntegerField(default=0)
     place_id = models.CharField(max_length=255, default="")
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
    

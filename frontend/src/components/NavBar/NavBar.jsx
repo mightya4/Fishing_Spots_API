@@ -2,7 +2,6 @@ import React from "react";
 import { useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
-import Dropdown from 'react-bootstrap/Dropdown'
 import "./NavBar.css";
 
 const Navbar = () => {
@@ -19,6 +18,11 @@ const Navbar = () => {
         <li>
           <Link to="/displayparks" >
             <b>Display Parks</b>
+          </Link>
+        </li>
+        <li>
+          <Link to="/visitedparks" >
+            <b>Visited Parks</b>
           </Link>
         </li>
         <li>

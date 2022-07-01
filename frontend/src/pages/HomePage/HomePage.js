@@ -12,6 +12,7 @@ const HomePage = (props) => {
   const [user, token] = useAuth();
   const [cars, setCars] = useState([]);
   const [savedParks, setSavedParks] = useState([]);
+  const [postPark, setPostPark] = useState([])
 
   useEffect(() => {
     const fetchCars = async () => {

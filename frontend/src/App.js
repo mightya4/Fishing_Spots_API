@@ -12,7 +12,7 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 // Component Imports
 import Navbar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
-import SearchBox from "./components/Search/SearchBox";
+import VisitedParks from "./pages/VisitedParks/VisitedParks";
 import DisplayParks from "./components/Maps/DisplayParks";
 
 // Util Imports
@@ -22,25 +22,25 @@ import PrivateRoute from "./utils/PrivateRoute";
 
 
 function App() {
-  const [searchResults, setSearchResults] = useState("")
   const [parks, setParks] = useState([])
+  const [favoriteParks, setFavoriteParks] = useState([])
 
   return (
     <div>
       <Navbar />
-      {/* <SearchBox searchResults={searchResults} setSearchResults={setSearchResults}/> */}
       <Routes>
         <Route
           path="/"
           element={
             <PrivateRoute>
-              <HomePage parks = {parks}/>
+              <HomePage parks = {parks} setParks = {setParks}/>
             </PrivateRoute>
           }
         />
-        <Route path = "/displayparks" element={<DisplayParks  parks = {parks} setParks = {setParks}/>} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path = "/displayparks" element={<DisplayParks  favoriteParks = {favoriteParks} setFavoriteParks = {setFavoriteParks} parks = {parks} setParks = {setParks}/>} />
+        <Route path = "/visitedparks" element={<VisitedParks  parks = {parks}/>} />
       </Routes>
       <Footer />
     </div>
