@@ -21,8 +21,8 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/visitedparks" >
-            <b>Visited Parks</b>
+          <Link to="/favoriteparks" >
+            <b>Favorite Parks</b>
           </Link>
         </li>
         <li>

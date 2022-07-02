@@ -12,7 +12,7 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 // Component Imports
 import Navbar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
-import VisitedParks from "./pages/VisitedParks/VisitedParks";
+import FavoriteParks from "./pages/FavoriteParks/FavoriteParks";
 import DisplayParks from "./components/Maps/DisplayParks";
 
 // Util Imports
@@ -40,7 +40,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path = "/displayparks" element={<DisplayParks  favoriteParks = {favoriteParks} setFavoriteParks = {setFavoriteParks} parks = {parks} setParks = {setParks}/>} />
-        <Route path = "/visitedparks" element={<VisitedParks  parks = {parks}/>} />
+        <Route path = "/favoriteparks" element={<FavoriteParks  favoriteParks = {favoriteParks}/>} />
       </Routes>
       <Footer />
     </div>
