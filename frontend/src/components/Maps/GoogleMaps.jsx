@@ -50,7 +50,7 @@ const GoogleMaps = (props) => {
             if(status === window.google.maps.places.PlacesServiceStatus.OK) {
                 console.log(results)
                 for(var i = 0; i < results.length; i++){
-                    parkLatLngArray.push({name: results[i].name, lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng(), rating: results[i].rating, icon: results[i].icon, photos: results[i].photos, address: results[i].formatted_address, place_id: results[i].place_id,  is_favorite: false, has_fished: false, is_fishing_location: false})
+                    parkLatLngArray.push({name: results[i].name, lat: results[i].geometry.location.lat(), lng: results[i].geometry.location.lng(), rating: results[i].rating, icon: results[i].icon, photos: results[i].photos, formatted_address: results[i].formatted_address, place_id: results[i].place_id, types_of_fish: "none", is_favorite: false, has_fished: false, is_fishing_location: false})
                 }
             }
     

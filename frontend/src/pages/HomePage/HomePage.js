@@ -17,6 +17,7 @@ const HomePage = (props) => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
+        console.log("Get token: " + token)
         let response = await axios.get("http://127.0.0.1:8000/api/cars/", {
           headers: {
             Authorization: "Bearer " + token,
@@ -33,6 +34,7 @@ const HomePage = (props) => {
   useEffect(() => {
     const fetchAllSavedParks = async () => {
       try {
+        console.log("Get token: " + token)
         let response = await axios.get("http://127.0.0.1:8000/api/map/all_saved_fishing_spots", {
           headers: {
             Authorization: "Bearer " + token,
