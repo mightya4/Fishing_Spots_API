@@ -15,11 +15,11 @@ def get_all_parks_campgrounds(request):
     serializer = FishingSpotsSerializer(parks_and_campgrounds, many=True)
     return Response(serializer.data)
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_all_user_fishing_spots(request):
+    fishing_spots = FishingSpots.objects.all()
     if request.method == 'GET':
-        fishing_spots = FishingSpots.objects.all()
         serializer = FishingSpotsSerializer(fishing_spots, many=True)
         return Response(serializer.data)
         
@@ -28,6 +28,10 @@ def get_all_user_fishing_spots(request):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+    elif request.method == 'DELETE':
+            fishing_spots.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
     
 
 @api_view(['GET', 'PUT', 'DELETE'])
