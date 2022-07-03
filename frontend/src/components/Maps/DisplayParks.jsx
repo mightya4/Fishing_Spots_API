@@ -16,16 +16,12 @@ import {
 } from '@mui/material'
 import { Favorite, FavoriteBorder } from '@mui/icons-material'
 import './DisplayParks.css'
-// import DisplayParkDetail from './DisplayParkDetail'
 
 const DisplayParks = (props) => {
     const [user, token] = useAuth();
     const [currentFavoritePark, setCurrentFavoritePark] = useState()
     console.log(props.parks)
-    // const HandleCardClick = (e, placeID) => {
-    //     console.log(placeID)
-    //     DisplayParkDetail(placeID)
-    // }
+
     function addNewFavoritePark(park){
         let tempPark = [...props.favoriteParks, park]
         props.setFavoriteParks(tempPark)
@@ -82,19 +78,6 @@ const DisplayParks = (props) => {
         
     }
 
-    // updateFavoriteData =  {
-    //     "name": park.name,
-    //     "rating": park.rating,
-    //     "is_fishing_location": park.is_fishing_location,
-    //     "has_fished": park.has_fished,
-    //     "types_of_fish": park.types_of_fish,
-    //     "formatted_address": park.address,
-    //     "lat": park.lat,
-    //     "lng": park.lng,
-    //     "place_id": park.place_id,
-    // }
-
-
     useEffect(() => {
         const savedPark = async () => {
         
@@ -102,24 +85,9 @@ const DisplayParks = (props) => {
             const config = {
                 headers: { Authorization: `Bearer ${token}`}
             };
-            // const bodyParameters = {}
-            // if(currentFavoritePark.length > 0){
-            //     bodyParameters =  {
-            //         "name": currentFavoritePark.name,
-            //         "rating": currentFavoritePark.rating,
-            //         "is_fishing_location": currentFavoritePark.is_fishing_location,
-            //         "has_fished": currentFavoritePark.has_fished,
-            //         "types_of_fish": currentFavoritePark.types_of_fish,
-            //         "formatted_address": currentFavoritePark.address,
-            //         "lat": currentFavoritePark.lat,
-            //         "lng": currentFavoritePark.lng,
-            //         "place_id": currentFavoritePark.place_id,
-            //     }
-            // }
             
             let response = await axios.post("http://127.0.0.1:8000/api/map/all_saved_fishing_spots", currentFavoritePark, config);
 
-            console.log("Post token: " + token)
           } catch (error) {
             console.log(error.response.data);
           }
@@ -149,20 +117,15 @@ const DisplayParks = (props) => {
                                                     
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary">
-                                                    {`Address: ${park.address}`}
+                                                    {`Address: ${park.formatted_address}`}
                                                 </Typography>
                                             </CardContent>
                                         
                                         <CardActions>
-                                            {/* <CheckBox {...label} icon = {<FavoriteBorder/>} checkedIcon={<Favorite/>} onChange={handleChange} aria-label="add to favorites"/> */}
-                        
-                                            {/* <Button size="small" color="primary">Directions</Button> */}
                                             <FormGroup>
                                                 <FormControlLabel control={<Checkbox onClick={() => HandleLocationCheck(index, park)}/>} label="Is this a fishing location"/>
                                                 <FormControlLabel control={<Checkbox onClick={() => HandleHasFishedCheck(index, park)}/>} label="Fished"/>
                                             </FormGroup>
-                                            {/* <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />
-                                            <Button size="small" color="primary" onClick={() => handleClick(park, "clicked")}>Add To Favorites</Button> */}
                                         </CardActions>
                                         <CardActions>
                                             <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />

@@ -33,7 +33,6 @@ const GoogleMaps = (props) => {
                 lat = position.coords["latitude"]
                 lng = position.coords["longitude"]
                 var newLatLng = new window.google.maps.LatLng(lat, lng)
-                console.log(`current locale: ${lat} , ${lng}`)
                 map.panTo(newLatLng)
             })
             
@@ -169,7 +168,6 @@ const GoogleMaps = (props) => {
         //Populate the array of markers and drop the marker at each location
         sleep(500).then(() => {
         if(map!== null && parkLatLngArray!== null){
-            console.log("Map is idle")
             createMarker(parkLatLngArray)
         }
         })
