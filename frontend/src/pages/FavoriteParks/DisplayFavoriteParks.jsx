@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
-import axios from 'axios';
+import { getAllFavoriteParks, addFavoritePark, deleteAllFavoritePark, getFavoriteParkByID, updateFavoriteParkByID, deleteFavoriteParkByID } from '../../components/Maps/CrudEssentials';
+
 import {
     Box,
     Card,
@@ -12,12 +13,13 @@ import {
     TextField,
     Typography,
     FormGroup,
-    FormControlLabel
+    FormControlLabel,
+    Button
 } from '@mui/material'
 import { Favorite, FavoriteBorder } from '@mui/icons-material'
 
-const FavoriteParks = (props) => {
-    const [savedFavoriteParks, setSavedFavoriteParks] = useState()
+const DisplayFavoriteParks = (props) => {
+    const [savedFavoriteParks, setSavedFavoriteParks] = useState([]);
     const [user, token] = useAuth();
 
 
@@ -41,31 +43,18 @@ const FavoriteParks = (props) => {
         return(someWords)
         
     }
+    
+    const HandleDeleteAll = () => {
+        deleteAllFavoritePark(token)
+    }
+    
 
-
-    useEffect(()=> {
-        const fetchFavoriteParks = async () => {
-            try{
-                let response = await axios.get("http://127.0.0.1:8000/api/map/all_saved_fishing_spots", {
-                    headers: {
-                        Authorization: "Bearer " + token,
-                    },
-                })
-                setSavedFavoriteParks(response.data)
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        };
-        fetchFavoriteParks();
+    useEffect(
+        ()=> {
+        var park = getAllFavoriteParks(token)
+        // setSavedFavoriteParks(park)
+        console.log(park)
         }, [token])
-
-
-
-    let favoriteParks = ()=>{savedFavoriteParks.map(park => park.has_fished === true).map(filteredPark => (
-            <li>
-                {filteredPark}
-            </li>
-        ))}
 
     
     return ( 
@@ -73,6 +62,7 @@ const FavoriteParks = (props) => {
             <div style={{ padding: 30 }}>
                 {<h1>Favorite Parks Page for {user.username}</h1>}
                     <Box sx={{ display: 'grid', columnGap:3, rowGap: 1, gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: 'auto' }}>
+                        <Button onClick={HandleDeleteAll}> Delete All Favorites </Button>
                         {savedFavoriteParks &&
                             savedFavoriteParks.map((park, index) => {
                                 console.log(`index-${index}:  park-${park.name}`)
@@ -82,6 +72,7 @@ const FavoriteParks = (props) => {
                                                 title = {park.name}
                                                 subheader = {`Rating: ${park.rating}`}
                                             />
+
 
                                                 <CardMedia
                                                     component = "img"
@@ -125,4 +116,4 @@ const FavoriteParks = (props) => {
      );
 }
  
-export default FavoriteParks;
+export default DisplayFavoriteParks;

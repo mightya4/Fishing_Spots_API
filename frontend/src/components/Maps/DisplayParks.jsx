@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
-import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
+import { addFavoritePark} from './CrudEssentials';
 import {
     Box,
     Card,
@@ -27,20 +27,32 @@ const DisplayParks = (props) => {
         props.setFavoriteParks(tempPark)
     }
     const HandleClick = (index, park) => {
-        const newPark = {
-            "name": park.name,
-            "rating": park.rating,
-            "is_fishing_location": park.is_fishing_location,
-            "has_fished": park.has_fished,
-            "types_of_fish": park.types_of_fish,
-            "formatted_address": park.formatted_address,
-            "lat": park.lat,
-            "lng": park.lng,
-            "place_id": park.place_id,
-        }
-        setCurrentFavoritePark(newPark)
-        addNewFavoritePark(newPark)
-        console.log(props.favoriteParks)
+        var newPark ="";
+        const favoritePromise = new Promise((resolve, reject) => {
+            resolve(
+                newPark = {
+                    "name": park.name,
+                    "rating": park.rating,
+                    "is_fishing_location": park.is_fishing_location,
+                    "has_fished": park.has_fished,
+                    "types_of_fish": park.types_of_fish,
+                    "formatted_address": park.formatted_address,
+                    "lat": park.lat,
+                    "lng": park.lng,
+                    "place_id": park.place_id,
+                }
+            )
+        })
+        favoritePromise.then((newPark) => {
+            if(newPark && newPark.name == ""){}
+            else{
+                setCurrentFavoritePark(newPark)
+                addNewFavoritePark(currentFavoritePark)
+                console.log(props.favoriteParks) 
+            }
+            
+        })
+        
     }
     const HandleHasFishedCheck = (index, park) => {
         
@@ -79,21 +91,11 @@ const DisplayParks = (props) => {
     }
 
     useEffect(() => {
-        const savedPark = async () => {
+        addFavoritePark(token, currentFavoritePark)
         
-        try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}`}
-            };
-            
-            let response = await axios.post("http://127.0.0.1:8000/api/map/all_saved_fishing_spots", currentFavoritePark, config);
+        },[token, currentFavoritePark])
 
-          } catch (error) {
-            console.log(error.response.data);
-          }
-        }
-        savedPark()
-        },[currentFavoritePark])
+    
      return(
             <div style={{ padding: 30 }}>
                 <Box sx={{ display: 'grid', columnGap:3, rowGap: 1, gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: 'auto' }}>
