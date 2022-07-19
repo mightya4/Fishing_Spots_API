@@ -1,31 +1,32 @@
 
 const SearchBox = (props) => {
-    const handleOriginSubmit = (event) => {
+    var currentOrigin, currentDestination;
+
+
+
+    const handleSubmit = (event) => {
         event.preventDefault();
-        props.setOrigin(event.target[0].value)
-        console.log(event.target[0].value)
-    }
-    const handleDestinationSubmit = (event) => {
-        event.preventDefault();
-        props.setDestination(event.target[0].value)
-        console.log(event.target[0].value)
-    }
+        currentOrigin = event.target[0].value
+        currentDestination = event.target[1].value
+        props.setOrigin(currentOrigin)
+        props.setDestination(currentDestination)
+        console.log(`origin: ${props.origin}`)
+        console.log(`destination: ${props.destination}`)
+        }
+
 
     
     return ( 
 
         <div>
-            <form onSubmit={handleOriginSubmit}>
+            <form onSubmit={handleSubmit}>
                 <label> Origin: 
-                    <input placeholder="Enter Address" type="text"/>
+                    <input  id="originInput" placeholder="Enter Address" type="text"/>
                 </label>
-                <button type="submit">Search</button>
-            </form>
-            <form onSubmit={handleDestinationSubmit}>
                 <label> Destination: 
-                    <input placeholder="Enter Address" type="text"/>
+                    <input id="destInput" placeholder="Enter Address" type="text"/>
                 </label>
-                <button type="submit">Search</button>
+                <button id="btnSubmit" type="submit">Search</button>
             </form>
         </div>
 
