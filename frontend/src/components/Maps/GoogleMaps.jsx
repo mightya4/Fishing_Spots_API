@@ -15,6 +15,9 @@ const GoogleMaps = (props) => {
     var directionsService
     var current_location
     var infowindow
+    var parkLatLngArray
+    var arrayOfMarkers
+    var markerBounds
 
     
 
@@ -25,22 +28,29 @@ const GoogleMaps = (props) => {
         directionsRenderer = new window.google.maps.DirectionsRenderer()
         directionsService = new window.google.maps.DirectionsService()
         infowindow = new window.google.maps.InfoWindow();
+        
 
 
         function sleep(ms){
             return new Promise(resolve => setTimeout(resolve, ms));
         }
+        
+        //Wait before loading map
+   
+        if(document.getElementById('map')){
+            LoadMap()
+        }
+    }
 
+
+    //Encapsulate Load Map Function
+    const LoadMap = (()=>{
         //Find all parks and lakes to fish nearby user location
         var request = {
             query: ['lakes + parks + campground + fishing'],
             fields: ['name', 'geometry'],
         };
-        var parkLatLngArray = []
-        
-
-    
-        const LoadMap = (()=>{
+        parkLatLngArray = []
         
         
         var mapOptions = {center: current_location, zoom: 15}
@@ -70,77 +80,14 @@ const GoogleMaps = (props) => {
         })
         console.log(parkLatLngArray)
     
-        //Adjust map bounds to fit all markers
-        function fitMarkersInMapView(currentMap, currentMarkerBounds, currentMarker){
-            currentMarkerBounds.extend(currentMarker.getPosition())
-            currentMap.fitBounds(currentMarkerBounds)
-        }
+
     
         //Create an array of markers and a function to update the array
-        var arrayOfMarkers = []
-        var markerBounds = new window.google.maps.LatLngBounds();
-        function createMarker (arrayOfLatLng) {
-            for(var i = 0; i < arrayOfLatLng.length; i++){
-                var point = new window.google.maps.LatLng(parseFloat(arrayOfLatLng[i].lat), parseFloat(arrayOfLatLng[i].lng))
-                
-                var image = {
-                    url: parkLatLngArray[i].icon
-                }
-                var title = parkLatLngArray[i].name
-                var marker = new window.google.maps.Marker({
-                    animation: window.google.maps.Animation.DROP,
-                    position: point,
-                    map: map,
-                    title: title
-                }) 
-                
-                arrayOfMarkers.push(marker)
-                props.setParks(parkLatLngArray)
-             
-                fitMarkersInMapView(map, markerBounds, marker)
-                // var setLocationContent = marker.getTitle() + '<br>Directions: <a href="javascript:toLocation(' + i + ')">To Location</a> - <a href="javascript:fromLocation(' + i + ')">From Location</a> <br>Add Fishing Spot: <a href="javascript:AddFishingSpot(' + marker + ')">';
-    
-                // to_location[i] = setLocationContent + '<br>Directions: <b>To Location</b> - <a href="javascript:fromLocation(' + i + ')">From Location</a>' +
-                //     '<br>Start address:<form action="javascript:getDirections()">' +
-                //     '<input type="text" SIZE=40 MAXLENGTH=40 name="startingAddress" id="startingAddress" value="" /><br>' +
-                //     '<INPUT value="Get Directions" TYPE="button" onclick="getDirections()"><br>' +
-                //     'Walk <input type="checkbox" name="walk" id="walk" /> &nbsp; Avoid Highways <input type="checkbox" name="highways" id="highways" />' +
-                //     '<input type="hidden" id="destinationAddress" value="' + point.lat() + ',' + point.lng() +
-                //     '"/>';
-                // // The info window version with the "From Location" form open
-                // from_location[i] = setLocationContent + '<br>Directions: <a href="javascript:fromLocation(' + i + ')">To Location</a> - <b>From Location</b>' +
-                //     '<br>End address:<form action="javascript:getDirections()">' +
-                //     '<input type="text" SIZE=40 MAXLENGTH=40 name="destinationAddress" id="destinationAddress" value="" /><br>' +
-                //     '<INPUT value="Get Directions" TYPE="SUBMIT"><br>' +
-                //     'Walk <input type="checkbox" name="walk" id="walk" /> &nbsp; Avoid Highways <input type="checkbox" name="highways" id="highways" />' +
-                //     '<input type="hidden" id="startingAddress" value="' + point.lat() + ',' + point.lng() +
-                //     '"/>';
-    
-                // var contentString = setLocationContent;
-                // specifiedDestinationAddress[i] = setLocationContent
-                //Create info window and display select marker information
-                // window.google.maps.event.addListener(marker, 'click', (function(marker, i){
-                //     return function(){
-                //         infowindow.setContent(contentString)
-                //         infowindow.open(map, marker);
-                //     }
-                // })(marker, i))
-    
-            }
-        }
-
-
-        
+        arrayOfMarkers = []
+        markerBounds = new window.google.maps.LatLngBounds();
         directionsRenderer.setMap(map);
         directionsRenderer.setPanel(document.getElementById("DisplayDirectionPanel"));
-        // setOrigin(document.getElementById("txtOrigin")).value;
-        // setDestination(document.getElementById("txtDestination")).value;
 
-        
-        
-        
-        // displayDirections.setMap(map)
-        // displayDirections.setPanel(document.getElementById("DisplayDirectionPanel"))
         window.google.maps.event.addListener(map, 'click', function(){
             infowindow.close()
         })
@@ -173,16 +120,7 @@ const GoogleMaps = (props) => {
             window.google.maps.event.trigger(arrayOfMarkers[i], "click")
         }
     
-        // function toLocation (i) {
-        //     infowindow.setContent(to_location[i])
-        //     infowindow.open(map, arrayOfMarkers[i])
-        // }
-        
-        // function fromLocation (i) {
-        //     infowindow.setContent(from_location[i])
-        //     infowindow.open(map, arrayOfMarkers[i])
-        // }
-    
+
         //Add Fishing Spot Based on Current Marker Information
         const AddFishingSpot = ((current_marker)=>{
             infowindow.setContent(current_marker)
@@ -190,21 +128,14 @@ const GoogleMaps = (props) => {
         })
 
         //Populate the array of markers and drop the marker at each location
-        sleep(500).then(() => {
-        if(map!== null && parkLatLngArray!== null){
-            createMarker(parkLatLngArray)
-        }
-        })
+        // sleep(500).then(() => {
+        // if(map!== null && parkLatLngArray!== null){
+        //     createMarker(parkLatLngArray)
+        // }
+        // })
         }
     
-        })
-        
-        //Wait before loading map
-        sleep(1000).then(() => {
-            LoadMap()
-        })
-
-    }
+        }) //End Of LoadMap
 
     //Autocomplete Origin and Destination Inputs for Google Map SearchBox
     const originInput = document.getElementById("originInput")
@@ -219,9 +150,13 @@ const GoogleMaps = (props) => {
     }
 
     useEffect(()=>{
-        var currentOrigin = geocodeAddresses(origin)
-        var currentDestination = geocodeAddresses(destination)
-    }, [origin, destination])
+        if(origin != undefined && destination != undefined){
+            var currentOrigin = geocodeAddresses(origin)
+            var currentDestination = geocodeAddresses(destination)
+        }
+        
+        createMarker(parkLatLngArray)
+    }, [origin, destination, parkLatLngArray])
 
     function findDirections(currentAddress) {
         directionsService.route({
@@ -237,10 +172,41 @@ const GoogleMaps = (props) => {
         })
 
     }
+    //Adjust map bounds to fit all markers
+    function fitMarkersInMapView(currentMap, currentMarkerBounds, currentMarker){
+        currentMarkerBounds.extend(currentMarker.getPosition())
+        currentMap.fitBounds(currentMarkerBounds)
+    }
+    
+    function createMarker (arrayOfLatLng) {
+        if(arrayOfLatLng){
+            for(var i = 0; i < arrayOfLatLng.length; i++){
+                var point = new window.google.maps.LatLng(parseFloat(arrayOfLatLng[i].lat), parseFloat(arrayOfLatLng[i].lng))
+                
+                var image = {
+                    url: parkLatLngArray[i].icon
+                }
+                var title = parkLatLngArray[i].name
+                var marker = new window.google.maps.Marker({
+                    animation: window.google.maps.Animation.DROP,
+                    position: point,
+                    map: map,
+                    title: title
+                }) 
+                
+                arrayOfMarkers.push(marker)
+                props.setParks(parkLatLngArray)
+             
+                fitMarkersInMapView(map, markerBounds, marker)
+    
+            }
+        }
+
+    }
     
     function geocodeAddresses(currentItem) {
         geocoder = new window.google.maps.Geocoder();
-        if(geocoder){
+        if(geocoder.geocode.arguments && currentItem){
             geocoder.geocode( { 'address ': currentItem}, function(results, status) {
                 if (status == 'OK') {
                     map.setCenter(results[0].geometry.location);
@@ -257,7 +223,6 @@ const GoogleMaps = (props) => {
     window.GOOGLE_MAP_KEY = GOOGLE_MAP_KEY
     window.InitMap = InitMap
 
-        // return <div id="map" style={{width: 600, height: 600}}></div>
         return (
             <div>
                 <SearchBox findDirections = {findDirections} geocodeAddresses = {geocodeAddresses} origin = {origin} destination = {destination} setOrigin = {setOrigin} setDestination = {setDestination}/>
