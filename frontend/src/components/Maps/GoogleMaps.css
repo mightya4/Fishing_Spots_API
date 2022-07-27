@@ -18,3 +18,9 @@ tr {
     border-radius: 2rem;
 
 }
+.map-directions-box {
+    height: 40rem;
+    width: 40rem;
+    border-width: 3px;
+    border-style: solid;
+}

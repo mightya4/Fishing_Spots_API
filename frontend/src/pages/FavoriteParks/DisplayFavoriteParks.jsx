@@ -1,6 +1,7 @@
+import { axios } from 'axios';
 import { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
-import { getAllFavoriteParks, addFavoritePark, deleteAllFavoritePark, getFavoriteParkByID, updateFavoriteParkByID, deleteFavoriteParkByID } from '../../components/Maps/CrudEssentials';
+import { deleteAllFavoritePark } from '../../components/Maps/CrudEssentials';
 
 import {
     Box,
@@ -48,66 +49,35 @@ const DisplayFavoriteParks = (props) => {
         deleteAllFavoritePark(token)
     }
     
+    useEffect(() => {
+        const fetchAllSavedParks = async () => {
+          try {
+            let response = await axios.get("http://127.0.0.1:8000/api/map/all_saved_fishing_spots", {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            });
+            setSavedFavoriteParks(response.data);
+          } catch (error) {
+            console.log(error.response.data);
+          }
+        };
+        fetchAllSavedParks();
+      }, [token]);
 
-    useEffect(
-        ()=> {
-        var park = getAllFavoriteParks(token)
-        // setSavedFavoriteParks(park)
-        console.log(park)
-        }, [token])
 
     
     return ( 
 
             <div style={{ padding: 30 }}>
-                {<h1>Favorite Parks Page for {user.username}</h1>}
-                    <Box sx={{ display: 'grid', columnGap:3, rowGap: 1, gridTemplateColumns: 'repeat(4, 1fr)', gridTemplateRows: 'auto' }}>
-                        <Button onClick={HandleDeleteAll}> Delete All Favorites </Button>
-                        {savedFavoriteParks &&
-                            savedFavoriteParks.map((park, index) => {
-                                console.log(`index-${index}:  park-${park.name}`)
-                                return(
-                                        <Card key={index} >
-                                            <CardHeader
-                                                title = {park.name}
-                                                subheader = {`Rating: ${park.rating}`}
-                                            />
+                        { savedFavoriteParks && savedFavoriteParks.map((park) => (
+                        <p key={park.id}>
+                            {park.user}
+                            {park.name} {park.rating} {park.is_fishing_location} {park.has_fished} {park.types_of_fish} {park.formatted_address} {park.latitude} {park.longitude} 
+                        </p>
+                        ))
 
-
-                                                <CardMedia
-                                                    component = "img"
-                                                    alt = "default park image"
-                                                    height="140"
-                                                    image="https://st2.depositphotos.com/1186248/7003/i/450/depositphotos_70032099-stock-photo-view-in-hyde-park-london.jpg"
-                                                />
-                                                <CardContent>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        
-                                                    </Typography>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        {`Address: ${park.formatted_address}`}
-                                                    </Typography>
-                                                </CardContent>
-                                            
-                                            <CardActions>
-                                                <FormGroup>
-                                                    {/* <FormControlLabel control={<Checkbox onClick={() => HandleLocationCheck(index, park)}/>} label="Is this a fishing location"/>
-                                                    <FormControlLabel control={<Checkbox onClick={() => HandleHasFishedCheck(index, park)}/>} label="Fished"/> */}
-                                                </FormGroup>
-
-                                            </CardActions>
-                                            <CardActions>
-                                                <TextField id="filled-basic" label="Enter Types of Fish Located Here:" variant="filled" />
-                                            </CardActions>
-                                            <CardActions>
-                                            <FormGroup>
-                                                    {/* <FormControlLabel control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} onClick={() => HandleClick(index, park)}/>} label="Favorite"/> */}
-                                            </FormGroup>
-                                            </CardActions>
-                                        </Card>
-                                    
-                        )})}
-                        </Box>
+                        }
                     </div>
         
 

@@ -11,12 +11,21 @@ const SearchBox = (props) => {
         if(currentOrigin && currentDestination){
             props.setOrigin(currentOrigin)
             props.setDestination(currentDestination)
+            
+            props.geocodeAddresses(currentOrigin, currentDestination).then(function (result) {
+                
+                props.findDirections(result);
+            }, function (error) {
+                alert(error);
+            })
+            
         }
         
-        if(props.origin && props.destination){
-            console.log(`origin: ${props.origin}`)
-            console.log(`destination: ${props.destination}`)
-        }
+        
+        // if(props.origin && props.destination){
+        //     console.log(`origin: ${props.origin}`)
+        //     console.log(`destination: ${props.destination}`)
+        // }
         
         }
 

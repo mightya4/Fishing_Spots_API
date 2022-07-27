@@ -57,14 +57,14 @@ const HomePage = (props) => {
         ))} */}
         <GoogleMaps setParks = {props.setParks}/>
         {/* Display all saved parks data underneath map */}
-        { savedParks && savedParks.map((park) => (
+        {/* { savedParks && savedParks.map((park) => (
           <p key={park.id}>
             {park.user}
             {park.name} {park.rating} {park.is_fishing_location} {park.has_fished} {park.types_of_fish} {park.formatted_address} {park.latitude} {park.longitude} 
           </p>
         ))
 
-        }
+        } */}
     </div>
   );
 };

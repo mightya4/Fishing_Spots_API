@@ -20,21 +20,21 @@ const GoogleMaps = (props) => {
     var markerBounds
 
     
-
+    function sleep(ms){
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
     const InitMap = () => {
         
         geocoder = new window.google.maps.Geocoder();
         current_location = new window.google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-        directionsRenderer = new window.google.maps.DirectionsRenderer()
-        directionsService = new window.google.maps.DirectionsService()
+        // directionsRenderer = new window.google.maps.DirectionsRenderer()
+        // directionsService = new window.google.maps.DirectionsService()
         infowindow = new window.google.maps.InfoWindow();
         
 
 
-        function sleep(ms){
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        
+
         //Wait before loading map
    
         if(document.getElementById('map')){
@@ -85,8 +85,8 @@ const GoogleMaps = (props) => {
         //Create an array of markers and a function to update the array
         arrayOfMarkers = []
         markerBounds = new window.google.maps.LatLngBounds();
-        directionsRenderer.setMap(map);
-        directionsRenderer.setPanel(document.getElementById("DisplayDirectionPanel"));
+        // directionsRenderer.setMap(map);
+        // directionsRenderer.setPanel(document.getElementById("DisplayDirectionPanel"));
 
         window.google.maps.event.addListener(map, 'click', function(){
             infowindow.close()
@@ -127,12 +127,12 @@ const GoogleMaps = (props) => {
             infowindow.open(map, current_marker)
         })
 
-        //Populate the array of markers and drop the marker at each location
-        // sleep(500).then(() => {
-        // if(map!== null && parkLatLngArray!== null){
-        //     createMarker(parkLatLngArray)
-        // }
-        // })
+        // Populate the array of markers and drop the marker at each location
+        sleep(500).then(() => {
+        if(map!== null && parkLatLngArray!== null){
+            createMarker(parkLatLngArray)
+        }
+        })
         }
     
         }) //End Of LoadMap
@@ -149,27 +149,39 @@ const GoogleMaps = (props) => {
     const autocompleteDestination = new window.google.maps.places.Autocomplete(destinationInput, searchOptions);
     }
 
-    useEffect(()=>{
-        if(origin != undefined && destination != undefined){
-            var currentOrigin = geocodeAddresses(origin)
-            var currentDestination = geocodeAddresses(destination)
+
+
+    function findDirections(trip) {
+        map = null
+        var mapOptions = {center: current_location, zoom: 15}
+        map = new window.google.maps.Map(
+            document.getElementById('map'), mapOptions
+        )
+        if (directionsRenderer != null ) {
+            directionsRenderer.setMap(null);
+        }
+        directionsService = new window.google.maps.DirectionsService()
+        directionsRenderer = new window.google.maps.DirectionsRenderer()
+        if(map!= null){
+            directionsRenderer.setMap(map);
         }
         
-        createMarker(parkLatLngArray)
-    }, [origin, destination, parkLatLngArray])
-
-    function findDirections(currentAddress) {
-        directionsService.route({
-            origin: currentAddress.origin.geometry.location,
-            destination: currentAddress.destination.geometry.location,
-            travelMode: 'DRIVING'
-        }, function (response, status) {
-            if (status === 'OK') {
-                directionsRenderer.setDirections(response);
-            } else {
-                window.alert('Directions request failed: ' + status)
-            }
-        })
+        directionsRenderer.setPanel(document.getElementById("DisplayDirectionPanel"));
+        if(trip.origin && trip.destination){
+            directionsService.route({
+                origin: trip.origin.geometry.location,
+                destination: trip.destination.geometry.location,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                    debugger
+                } else {
+                    window.alert('Directions request failed: ' + status)
+                }
+            })
+        }
+        
 
     }
     //Adjust map bounds to fit all markers
@@ -178,14 +190,26 @@ const GoogleMaps = (props) => {
         currentMap.fitBounds(currentMarkerBounds)
     }
     
+    // function addSingleMarker (singleMarker) {
+    //     if(singleMarker.length > 0) {
+    //         var point = new window.google.maps.LatLng(parseFloat(singleMarker[0].lat), parseFloat(singleMarker[0].lng))
+    //         var title = singleMarker[0].name
+    //         var marker = new window.google.maps.Marker({
+    //             animation: window.google.maps.Animation.DROP,
+    //             position: point,
+    //             map: map,
+    //             title: title
+    //         })
+    //         fitMarkersInMapView(map, markerBounds, marker)
+    //     } 
+    // }
+
+
     function createMarker (arrayOfLatLng) {
         if(arrayOfLatLng){
             for(var i = 0; i < arrayOfLatLng.length; i++){
                 var point = new window.google.maps.LatLng(parseFloat(arrayOfLatLng[i].lat), parseFloat(arrayOfLatLng[i].lng))
-                
-                var image = {
-                    url: parkLatLngArray[i].icon
-                }
+        
                 var title = parkLatLngArray[i].name
                 var marker = new window.google.maps.Marker({
                     animation: window.google.maps.Animation.DROP,
@@ -204,21 +228,54 @@ const GoogleMaps = (props) => {
 
     }
     
-    function geocodeAddresses(currentItem) {
-        geocoder = new window.google.maps.Geocoder();
-        if(geocoder.geocode.arguments && currentItem){
-            geocoder.geocode( { 'address ': currentItem}, function(results, status) {
-                if (status == 'OK') {
-                    map.setCenter(results[0].geometry.location);
-                    var marker = new window.google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location
-                    });
-                } else {
-                    alert ('Geocode was not successful for the following reason: ' + status);
-                }
-            });}
+  
+
+        function geocodeAddresses(origin, destination) {
+            geocoder = new window.google.maps.Geocoder();
+            return new Promise( function (resolve, reject) {
+                var geocodedOrigin, geocodedDestination;
+                geocoder.geocode({ 'address': origin}, 
+                    function (results, status) {
+                        if (status == window.google.maps.GeocoderStatus.OK) {
+                            geocodedOrigin = results[0];
+                            originMarker = new window.google.maps.Marker({
+                                position: geocodedOrigin.geometry.location,
+                                label: "O",
+                                map: map
+                            })
+                        } else {
+                            reject(Error("Could not geocode origin"));
+                        }
+                    })
+                    geocoder.geocode({ 'address': destination}, 
+                    function (results, status) {
+                        if (status == window.google.maps.GeocoderStatus.OK) {
+                            geocodedDestination = results[0];
+                            originMarker = new window.google.maps.Marker({
+                                position: geocodedDestination.geometry.location,
+                                label: "D",
+                                map: map
+                            })
+                            resolve({
+                                origin: geocodedOrigin,
+                                destination: geocodedDestination,
+                            })
+                        } else {
+                            reject(Error("Could not geocode destination"));
+                        }
+                    })
+            })
         }
+        // useEffect(()=>{
+        //     if(origin != undefined && destination != undefined){
+        //         var currentOrigin = geocodeAddresses(origin)
+        //         var currentDestination = geocodeAddresses(destination)
+        //     }
+            
+            
+        // }, [origin, destination])
+
+        
 
     window.GOOGLE_MAP_KEY = GOOGLE_MAP_KEY
     window.InitMap = InitMap
@@ -233,7 +290,7 @@ const GoogleMaps = (props) => {
                                 <div className='map-box' id="map"></div>
                             </td>
                             <td>
-                                <div id="DisplayDirectionPanel"></div>
+                                <div className='map-directions-box' id="DisplayDirectionPanel"></div>
                             </td>
                         </tr>
                     </tbody>
