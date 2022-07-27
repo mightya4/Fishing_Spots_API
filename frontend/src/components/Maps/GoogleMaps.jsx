@@ -166,20 +166,27 @@ const GoogleMaps = (props) => {
             directionsRenderer.setMap(map);
         }
         
+        directionsRenderer.setPanel(null);
         directionsRenderer.setPanel(document.getElementById("DisplayDirectionPanel"));
         if(trip.origin && trip.destination){
+            // directionsService.route({
+            //     origin: trip.origin.geometry.location,
+            //     destination: trip.destination.geometry.location,
+            //     travelMode: 'DRIVING'
+            // }, function (response, status) {
+            //     if (status === 'OK') {
+            //         directionsRenderer.setDirections(response);
+            //     } else {
+            //         window.alert('Directions request failed: ' + status)
+            //     }
+            // })
             directionsService.route({
                 origin: trip.origin.geometry.location,
                 destination: trip.destination.geometry.location,
                 travelMode: 'DRIVING'
-            }, function (response, status) {
-                if (status === 'OK') {
-                    directionsRenderer.setDirections(response);
-                    debugger
-                } else {
-                    window.alert('Directions request failed: ' + status)
-                }
-            })
+            }).then((response) => {
+                directionsRenderer.setDirections(response)
+            }).catch((e) => window.alert("Directions request failed due to " + e))
         }
         
 
@@ -228,7 +235,10 @@ const GoogleMaps = (props) => {
 
     }
     
-  
+        function displayAllFishingSpots() {
+            map = null
+            LoadMap()
+        }
 
         function geocodeAddresses(origin, destination) {
             geocoder = new window.google.maps.Geocoder();
@@ -281,20 +291,28 @@ const GoogleMaps = (props) => {
     window.InitMap = InitMap
 
         return (
-            <div>
+            <div className='float-container'>
                 <SearchBox findDirections = {findDirections} geocodeAddresses = {geocodeAddresses} origin = {origin} destination = {destination} setOrigin = {setOrigin} setDestination = {setDestination}/>
-                <table>
+                <button onClick={displayAllFishingSpots}>Display Fishing Spots</button>
+                <div className='float-box-left'>
+                    <div className='map-box' id="map"></div>
+                </div>
+                <div className='float-box-right'>
+                    <div id="DisplayDirectionPanel"></div>
+                </div>
+                
+                {/* <table>
                     <tbody>
                         <tr>
                             <td>
                                 <div className='map-box' id="map"></div>
                             </td>
                             <td>
-                                <div className='map-directions-box' id="DisplayDirectionPanel"></div>
+                                <div id="DisplayDirectionPanel"></div>
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> */}
             </div>
         )
         }

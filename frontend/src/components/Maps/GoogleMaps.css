@@ -10,6 +10,7 @@ tr {
 }
 
 .map-box {
+    float: left;
     height: 40rem;
     width: 40rem;
     border-width: 3px;
@@ -18,9 +19,22 @@ tr {
     border-radius: 2rem;
 
 }
-.map-directions-box {
-    height: 40rem;
-    width: 40rem;
-    border-width: 3px;
-    border-style: solid;
+/* 
+.float-container {
+    border: 3px solid #fff;
+    padding: 2rem;
+} */
+
+/* .float-box-left {
+    width: 50%;
+    margin-left: 2rem;
+    padding: 5px;
+    border: 2px
 }
+.float-box-right {
+    width: 50%;
+    margin-right: 2rem;
+    padding: 5px;
+    border: 2px
+} */
+
