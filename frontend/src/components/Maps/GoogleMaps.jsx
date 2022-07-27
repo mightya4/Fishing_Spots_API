@@ -224,7 +224,7 @@ const GoogleMaps = (props) => {
                     map: map,
                     title: title
                 }) 
-                
+
                 arrayOfMarkers.push(marker)
                 props.setParks(parkLatLngArray)
              
@@ -276,14 +276,6 @@ const GoogleMaps = (props) => {
                     })
             })
         }
-        // useEffect(()=>{
-        //     if(origin != undefined && destination != undefined){
-        //         var currentOrigin = geocodeAddresses(origin)
-        //         var currentDestination = geocodeAddresses(destination)
-        //     }
-            
-            
-        // }, [origin, destination])
 
         
 

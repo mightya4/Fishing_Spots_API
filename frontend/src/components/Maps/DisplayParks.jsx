@@ -27,10 +27,9 @@ const DisplayParks = (props) => {
         props.setFavoriteParks(tempPark)
     }
     const HandleClick = (index, park) => {
-        var newPark ="";
         const favoritePromise = new Promise((resolve, reject) => {
             resolve(
-                newPark = {
+                {
                     "name": park.name,
                     "rating": park.rating,
                     "is_fishing_location": park.is_fishing_location,
@@ -43,12 +42,16 @@ const DisplayParks = (props) => {
                 }
             )
         })
-        favoritePromise.then((newPark) => {
-            if(newPark && newPark.name == ""){}
+        favoritePromise.then((result) => {
+            if(result && result.name == ""){return}
             else{
-                setCurrentFavoritePark(newPark)
-                addNewFavoritePark(currentFavoritePark)
-                console.log(props.favoriteParks) 
+                setCurrentFavoritePark(result)
+                if(currentFavoritePark){
+                    addFavoritePark(token, currentFavoritePark)
+                    addNewFavoritePark(currentFavoritePark)
+                    console.log(currentFavoritePark) 
+                }
+                
             }
             
         })
@@ -90,10 +93,7 @@ const DisplayParks = (props) => {
         
     }
 
-    useEffect(() => {
-        addFavoritePark(token, currentFavoritePark)
-        
-        },[token, currentFavoritePark])
+
 
     
      return(
