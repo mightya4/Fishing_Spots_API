@@ -1,3 +1,4 @@
+import "./SearchBox.css"
 
 const SearchBox = (props) => {
     var currentOrigin, currentDestination;
@@ -41,7 +42,7 @@ const SearchBox = (props) => {
                 <label> Destination: 
                     <input id="destInput" placeholder="Enter Address" type="text"/>
                 </label>
-                <button id="btnSubmit" type="submit">Search</button>
+                <button className="display-button" id="btnSubmit" type="submit">Search</button>
             </form>
         </div>
 
